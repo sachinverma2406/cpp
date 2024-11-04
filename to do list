@@ -1,0 +1,165 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+class Task {
+public:
+    int id;
+    std::string description;
+    bool completed;
+
+    Task(int id, const std::string& description, bool completed = false)
+        : id(id), description(description), completed(completed) {}
+
+    void display() const {
+        std::cout << "ID: " << id << " | Task: " << description
+                  << " | Status: " << (completed ? "Completed" : "Pending") << "\n";
+    }
+};
+
+class ToDoList {
+private:
+    std::vector<Task> tasks;
+    int next_id;
+
+public:
+    ToDoList() : next_id(1) {}
+
+    void addTask(const std::string& description) {
+        tasks.emplace_back(next_id++, description);
+        std::cout << "Task added successfully.\n";
+    }
+
+    void markTaskCompleted(int id) {
+        for (auto& task : tasks) {
+            if (task.id == id) {
+                task.completed = true;
+                std::cout << "Task marked as completed.\n";
+                return;
+            }
+        }
+        std::cout << "Task with ID " << id << " not found.\n";
+    }
+
+    void deleteTask(int id) {
+        auto it = std::remove_if(tasks.begin(), tasks.end(),
+                                 [id](const Task& task) { return task.id == id; });
+        if (it != tasks.end()) {
+            tasks.erase(it, tasks.end());
+            std::cout << "Task deleted successfully.\n";
+        } else {
+            std::cout << "Task with ID " << id << " not found.\n";
+        }
+    }
+
+    void displayTasks() const {
+        if (tasks.empty()) {
+            std::cout << "No tasks available.\n";
+            return;
+        }
+        for (const auto& task : tasks) {
+            task.display();
+        }
+    }
+
+    void saveToFile(const std::string& filename) const {
+        std::ofstream file(filename);
+        for (const auto& task : tasks) {
+            file << task.id << "," << task.description << "," << task.completed << "\n";
+        }
+        file.close();
+        std::cout << "Tasks saved to " << filename << ".\n";
+    }
+
+    void loadFromFile(const std::string& filename) {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            std::cout << "Could not open file " << filename << ".\n";
+            return;
+        }
+        tasks.clear();
+        std::string line;
+        while (std::getline(file, line)) {
+            int id;
+            std::string description;
+            bool completed;
+            char comma;
+            std::istringstream ss(line);
+            if (ss >> id >> comma && std::getline(ss, description, ',') && ss >> completed) {
+                tasks.emplace_back(id, description, completed);
+            }
+        }
+        file.close();
+        std::cout << "Tasks loaded from " << filename << ".\n";
+    }
+};
+
+int main() {
+    ToDoList toDoList;
+    int choice;
+
+    do {
+        std::cout << "\nTo-Do List Menu:\n";
+        std::cout << "1. Add Task\n";
+        std::cout << "2. Mark Task as Completed\n";
+        std::cout << "3. Delete Task\n";
+        std::cout << "4. Display All Tasks\n";
+        std::cout << "5. Save Tasks to File\n";
+        std::cout << "6. Load Tasks from File\n";
+        std::cout << "0. Exit\n";
+        std::cout << "Enter choice: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                std::cin.ignore();
+                std::string description;
+                std::cout << "Enter task description: ";
+                std::getline(std::cin, description);
+                toDoList.addTask(description);
+                break;
+            }
+            case 2: {
+                int id;
+                std::cout << "Enter task ID to mark as completed: ";
+                std::cin >> id;
+                toDoList.markTaskCompleted(id);
+                break;
+            }
+            case 3: {
+                int id;
+                std::cout << "Enter task ID to delete: ";
+                std::cin >> id;
+                toDoList.deleteTask(id);
+                break;
+            }
+            case 4:
+                toDoList.displayTasks();
+                break;
+            case 5: {
+                std::cin.ignore();
+                std::string filename;
+                std::cout << "Enter filename to save tasks: ";
+                std::getline(std::cin, filename);
+                toDoList.saveToFile(filename);
+                break;
+            }
+            case 6: {
+                std::cin.ignore();
+                std::string filename;
+                std::cout << "Enter filename to load tasks: ";
+                std::getline(std::cin, filename);
+                toDoList.loadFromFile(filename);
+                break;
+            }
+            case 0:
+                std::cout << "Exiting the program.\n";
+                break;
+            default:
+                std::cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 0);
+
+    return 0;
+}
