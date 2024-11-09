@@ -1,0 +1,41 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+int main() {
+    std::string name1, name2;
+
+    // Prompt user for input
+    std::cout << "Enter the first person's name: ";
+    std::getline(std::cin, name1);
+    std::cout << "Enter the second person's name: ";
+    std::getline(std::cin, name2);
+
+    // Initialize random seed based on current time
+    std::srand(std::time(0));
+
+    // Generate a random love percentage
+    int lovePercentage = std::rand() % 101; // Random number between 0 and 100
+
+    // Display the result
+    std::cout << "Love percentage between " << name1 << " and " << name2 << " is: " 
+              << lovePercentage << "%" << std::endl;
+
+    return 0;
+}
+
+Inputs: The program takes two names as input.
+Random Number Generation: The std::srand(std::time(0)); line seeds the random number generator with the current time, ensuring different results each time you run the program.
+Random Percentage: std::rand() % 101 generates a random number from 0 to 100, simulating a "love percentage."
+Output: It displays the love percentage along with the names entered.
+
+g++ -o LoveCalculator LoveCalculator.cpp
+./LoveCalculator
+
+This basic structure gives you a starting point for experimenting with input, output, and simple randomization in C++.
+
+
+
+
+
+
