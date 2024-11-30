@@ -1,0 +1,56 @@
+1. Basic Syntax
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl; // Print output
+    return 0; // Exit the program
+}
+
+2. Variables and Data Types
+
+int age = 25;      // Integer
+float height = 5.9; // Float
+char grade = 'A';  // Character
+bool isPass = true; // Boolean
+string name = "Sachin"; // String
+
+3. Input/Output
+  #include <iostream>
+using namespace std;
+
+int main() {
+    int age;
+    cout << "Enter your age: ";
+    cin >> age; // Input
+    cout << "You entered: " << age << endl; // Output
+    return 0;
+}
+
+4. Conditional Statements
+int x = 10;
+if (x > 5) {
+    cout << "x is greater than 5" << endl;
+} else if (x == 5) {
+    cout << "x is equal to 5" << endl;
+} else {
+    cout << "x is less than 5" << endl;
+}
+
+5. Loops 
+for (int i = 0; i < 5; i++) {
+    cout << i << " ";
+}
+While Loop: 
+int i = 0;
+while (i < 5) {
+    cout << i << " ";
+    i++;
+}
+
+Do-While Loop:
+int i = 0;
+do {
+    cout << i << " ";
+    i++;
+} while (i < 5);
